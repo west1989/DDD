@@ -20,6 +20,7 @@ namespace Marketplace.Api
 
     public Task Handle(object command)
     {
+
       return command switch
       {
         V1.Create cmd => HandleCreate(cmd),
