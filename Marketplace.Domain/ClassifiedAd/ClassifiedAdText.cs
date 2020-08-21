@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Marketplace.Framework;
+﻿using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public class ClassifiedAdText : Value<ClassifiedAdText>
   {
     public string Value { get; }
 
     internal ClassifiedAdText(string text) => Value = text;
+    protected ClassifiedAdText() { }
 
     public static ClassifiedAdText FromString(string text) => new ClassifiedAdText(text);
 

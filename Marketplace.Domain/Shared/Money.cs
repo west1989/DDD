@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Marketplace.Domain.ClassifiedAd;
 using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.Shared
 {
   public class Money : Value<Money>
   {
@@ -38,6 +37,11 @@ namespace Marketplace.Domain
       Currency = currency;
     }
 
+    // Satisfy the serialization requirements 
+    protected Money()
+    {
+    }
+
     public Money Add(Money summand)
     {
       if (Currency != summand.Currency)
@@ -58,12 +62,5 @@ namespace Marketplace.Domain
     public static Money operator -(Money minuend, Money subtrahend) => minuend.Subtract(subtrahend);
 
     public override string ToString() => $"{Currency.CurrencyCode} {Amount}";
-  }
-
-  public class CurrencyMismatchException : Exception
-  {
-    public CurrencyMismatchException(string message) : base(message)
-    {
-    }
   }
 }

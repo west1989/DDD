@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Marketplace.Framework;
+﻿using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
-  public interface ICurrencyLookup
-  {
-    Currency FindCurrency(string currencyCode);
-  }
-
   public class Currency : Value<Currency>
   {
     public string CurrencyCode { get; set; }

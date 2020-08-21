@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+using Marketplace.Domain.Shared;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public class Price : Money
   {
@@ -19,5 +17,7 @@ namespace Marketplace.Domain
 
     public static Price FromDecimal(decimal amount, string currency, ICurrencyLookup currencyLookup) => new Price(amount, currency, currencyLookup);
 
+    // Satisfy the serialization requirements 
+    protected Price() { }
   }
 }

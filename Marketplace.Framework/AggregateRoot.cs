@@ -11,7 +11,10 @@ namespace Marketplace.Framework
 
     protected abstract void When(object @event);
     private readonly List<object> _changes;
-    protected AggregateRoot() => _changes = new List<object>();
+    protected AggregateRoot()
+    {
+      _changes = new List<object>();
+    }
 
     protected void Apply(object @event)
     {

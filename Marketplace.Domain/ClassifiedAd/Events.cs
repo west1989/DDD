@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public static class Events
   {

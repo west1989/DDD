@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Marketplace.Domain.Shared;
 using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public class ClassifiedAd : AggregateRoot<ClassifiedAdId>
   {
-    // public ClassifiedAdId Id { get; private set; }
+
+
+    private string DbId
+    {
+      get => $"ClassifiedAd/{Id.Value}";
+      set { }
+    }
+
     public UserId OwnerId { get; private set; }
     public ClassifiedAdTitle Title { get; private set; }
     public ClassifiedAdText Text { get; private set; }
@@ -23,6 +30,7 @@ namespace Marketplace.Domain
       Apply(new Events.ClassifiedAdCreated {Id = id, OwnerId = ownerId});
     }
 
+    protected ClassifiedAd() { }
 
     public void SetTitle(ClassifiedAdTitle title) =>
       Apply(new Events.ClassifiedAdTitleChanged { Id = Id, Title = title });
@@ -117,7 +125,6 @@ namespace Marketplace.Domain
       get { return Pictures.OrderBy(x => x.Order).FirstOrDefault(); }
     }
 
-
     protected override void EnsureValidState()
     {
       var valid =
@@ -131,15 +138,7 @@ namespace Marketplace.Domain
         });
 
       if (!valid)
-        throw new InvalidEntityStateException(this, $"Post-checks failed in state {State}");
+        throw new DomainExceptions.InvalidEntityState(this, $"Post-checks failed in state {State}");
     }
-  }
-
-  public enum ClassifiedAdState
-  {
-    PendingReview,
-    Active,
-    Inactive,
-    MarkedAsSold
   }
 }

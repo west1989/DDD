@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Marketplace.Domain.ClassifiedAd;
+using Marketplace.Domain.Shared;
 using Xunit;
 
 namespace Marketplace.Tests

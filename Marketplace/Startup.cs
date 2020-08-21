@@ -1,9 +1,15 @@
-using Marketplace.Api;
+using Marketplace.ClassifiedAd;
+using Marketplace.Domain;
+using Marketplace.Domain.ClassifiedAd;
+using Marketplace.Domain.Shared;
+using Marketplace.Framework;
+using Marketplace.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Raven.Client.Documents;
 
 namespace Marketplace
 {
@@ -13,6 +19,21 @@ namespace Marketplace
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services)
     {
+
+      var store = new DocumentStore
+      {
+        Urls = new[] {"http://localhost:8080"},
+        Database = "Marketplace_Raven",
+        Conventions = {FindIdentityProperty = m => m.Name == "DbId" }
+      };
+      store.Initialize();
+
+      services.AddSingleton<ICurrencyLookup, FixedCurrencyLookup>();
+      services.AddScoped(c => store.OpenAsyncSession());
+      services.AddScoped<IUnitOfWork, RavenDbUnitOfWork>();
+      services.AddScoped<IClassifiedAdRepository, ClassifiedAdRepository>();
+      services.AddScoped<ClassifiedAdsApplicationService>();
+
       services.AddControllers();
       services.AddSwaggerGen(c =>
         c.SwaggerDoc("v1",

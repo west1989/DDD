@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public class ClassifiedAdTitle : Value<ClassifiedAdTitle>
   {
@@ -31,6 +29,8 @@ namespace Marketplace.Domain
     public string Value { get; }
 
     internal ClassifiedAdTitle(string value) => Value = value;
+
+    protected ClassifiedAdTitle() { }
 
     public static implicit operator string(ClassifiedAdTitle title) => title.Value;
 

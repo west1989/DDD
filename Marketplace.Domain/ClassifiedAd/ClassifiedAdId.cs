@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Marketplace.Framework;
 
-namespace Marketplace.Domain
+namespace Marketplace.Domain.ClassifiedAd
 {
   public class ClassifiedAdId : Value<ClassifiedAdId>
   {
@@ -15,6 +13,9 @@ namespace Marketplace.Domain
 
       Value = value;
     }
+
+    protected ClassifiedAdId() { }
+
     public static implicit operator Guid(ClassifiedAdId self) => self.Value;
     public static implicit operator ClassifiedAdId(string value) => new ClassifiedAdId(Guid.Parse(value));
 

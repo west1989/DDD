@@ -30,8 +30,11 @@ namespace Marketplace.Framework
       });
     }
 
-    public override int GetHashCode() =>
-        CombineHashCodes(Members.Select(m => m.IsNonStringEnumerable ? CombineHashCodes(GetEnumerableValues(m.GetValue(this))) : m.GetValue(this)));
+    public override int GetHashCode()
+    {
+      return CombineHashCodes(Members.Select(m =>
+        m.IsNonStringEnumerable ? CombineHashCodes(GetEnumerableValues(m.GetValue(this))) : m.GetValue(this)));
+    }
 
     public static bool operator ==(Value<T> left, Value<T> right)
     {

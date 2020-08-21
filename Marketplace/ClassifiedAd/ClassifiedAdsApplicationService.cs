@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Marketplace.Contracts;
-using Marketplace.Domain;
+using Marketplace.Domain.ClassifiedAd;
+using Marketplace.Domain.Shared;
 using Marketplace.Framework;
-using static Marketplace.Contracts.ClassifiedAds;
+using static Marketplace.ClassifiedAd.ClassifiedAds;
 
-namespace Marketplace.Api
+namespace Marketplace.ClassifiedAd
 {
   public class ClassifiedAdsApplicationService : IApplicationService
   {
 
     private readonly IClassifiedAdRepository _repository;
-    private ICurrencyLookup _currencyLookup;
-    public ClassifiedAdsApplicationService(IClassifiedAdRepository repository, ICurrencyLookup currencyLookup)
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrencyLookup _currencyLookup;
+
+    public ClassifiedAdsApplicationService(IClassifiedAdRepository repository, IUnitOfWork unitOfWork,  ICurrencyLookup currencyLookup)
     {
       _repository = repository;
+      _unitOfWork = unitOfWork;
       _currencyLookup = currencyLookup;
     }
 
@@ -43,12 +46,13 @@ namespace Marketplace.Api
       if (await _repository.Exists(cmd.Id.ToString()))
         throw new InvalidOperationException($"Entity with id {cmd.Id} already exists");
 
-      var classifiedAd = new ClassifiedAd(new ClassifiedAdId(cmd.Id), new UserId(cmd.OwnerId));
+      var classifiedAd = new Domain.ClassifiedAd.ClassifiedAd(new ClassifiedAdId(cmd.Id), new UserId(cmd.OwnerId));
 
-      await _repository.Save(classifiedAd);
+      await _repository.Add(classifiedAd);
+      await _unitOfWork.Commit();
     }
 
-    private async Task HandleUpdate(Guid classifiedAdId, Action<ClassifiedAd> operation)
+    private async Task HandleUpdate(Guid classifiedAdId, Action<Domain.ClassifiedAd.ClassifiedAd> operation)
     {
       var classifiedAd = await _repository.Load(classifiedAdId.ToString());
 
@@ -56,7 +60,8 @@ namespace Marketplace.Api
         throw new InvalidOperationException($"Entity with id {classifiedAdId} cannot be found");
 
       operation(classifiedAd);
-      await _repository.Save(classifiedAd);
+      await _repository.Add(classifiedAd);
+      await _unitOfWork.Commit();
     }
 
 
